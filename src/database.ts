@@ -1,10 +1,10 @@
 export namespace Database {
 
-    export function make(name: string, options) {
+    export function oMake(name: string, options) {
 
     }
 
-    export function parallel(...databases) {
+    export function oParallel(...databases) {
         
     }
 }

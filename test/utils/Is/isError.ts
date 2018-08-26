@@ -1,12 +1,5 @@
 import { Is } from "../../../src/utils/is";
-//string
-//boolean
-//function
-//array
-//object
-//undefined
-//null
-//error
+
 export function isError() {
     expect(Is.err("")).toBe(false);
     expect(Is.err(false)).toBe(false);

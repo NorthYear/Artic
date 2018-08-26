@@ -4,7 +4,7 @@ export namespace Database {
 
     }
 
-    export function makeParallel(...databases) {
+    export function parallel(...databases) {
         
     }
 }

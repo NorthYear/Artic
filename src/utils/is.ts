@@ -121,5 +121,4 @@ export namespace Is {
         if (arr(v)) { return "array" }
         return typeof v;
     }
-
 }

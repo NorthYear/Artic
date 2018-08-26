@@ -119,6 +119,10 @@ export namespace Is {
     export function type(v) {
         if (nil(v)) { return "nil" }
         if (arr(v)) { return "array" }
+        if (v instanceof Error) { return "error" }
         return typeof v;
     }
+
+
+    export function strippingHtml(str: string) { }
 }

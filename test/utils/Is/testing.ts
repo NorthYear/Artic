@@ -8,16 +8,8 @@ import { isNil } from "./isNil";
 import { isNotNil } from "./isNotNil";
 import { getType } from "./getType";
 import { isError } from "./isError";
+import { isHtml } from "./isHtml";
 
-
-//string
-//boolean
-//function
-//array
-//object
-//undefined
-//null
-//error
 
 export function utilsIsTesting() {
     test("it should be able to determine if a variable is an error", isError);
@@ -30,4 +22,5 @@ export function utilsIsTesting() {
     test("it should be able to determine if a variable is null or undefined", isNil);
     test("it should be able to determine if a varialbe is not a nil value", isNotNil);
     test("it should be able to determine the type of a variable", getType);
+    test("it should be able to strip html from a string", isHtml)
 }

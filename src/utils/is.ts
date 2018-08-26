@@ -29,6 +29,17 @@ export namespace Is {
 
 
     /**
+     * ### @Artic / Utils/ Is / Html
+     * 
+     * Determines if a string contains html
+     * @param str 
+     */
+    export function html(str: string) {
+        return /(<([^>]+)>)/gi.test(str);
+    }
+
+
+    /**
      * ### @Artic / Utils / Is / StringLength
      * 
      * Determines if a string is a particular length
@@ -123,6 +134,4 @@ export namespace Is {
         return typeof v;
     }
 
-
-    export function strippingHtml(str: string) { }
 }

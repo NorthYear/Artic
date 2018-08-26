@@ -10,10 +10,12 @@ const context = {
     Article
 }
 
-export const mainDB = Database.make("main", {
+export const mainDB = Database.oMake("main", {
     context
 })
 
-export const backupDB = Database.make("backup", {
+export const backupDB = Database.oMake("backup", {
     context
 })
+
+export const allDB = Database.oParallel(mainDB, backupDB);

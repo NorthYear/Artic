@@ -1,6 +1,5 @@
 const crypto = require("crypto");
 const fs = require("fs");
-const path = require("path");
 const key = crypto.randomBytes(24).toString("base64");
 
 

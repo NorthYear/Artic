@@ -1,0 +1,27 @@
+{
+  "name": "@northyear/artic",
+  "version": "0.0.1",
+  "description": "An agnostic orm",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "build": "tsc --watch",
+    "test": "jest",
+    "setup:test:env": "node tools/build.env"
+  },
+  "author": "Josh Miller <josh@northyear.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^23.3.1",
+    "@types/node": "^10.9.2",
+    "jest": "^23.5.0",
+    "typescript": "^3.0.1"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "dist/src/**/*.js",
+      "!**/dist/src/interfaces/**"
+    ]
+  }
+}

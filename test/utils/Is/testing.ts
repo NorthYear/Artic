@@ -24,7 +24,7 @@ export function utilsIsTesting() {
     test("it should be able to determine if a variable is a string", isString)
     test("it should be able to determine if a variable has a particular string length", stringLength);
     test("it should be able to determine if a variable is a boolean value", isBool);
-    test("is should be able to determine if a variable is a function", isFunction);
+    test("it should be able to determine if a variable is a function", isFunction);
     test("it should be able to determine if a variable is an array", isArray);
     test("it should be able to determine if a variable is an obj", isObject);
     test("it should be able to determine if a variable is null or undefined", isNil);

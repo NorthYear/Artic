@@ -8,5 +8,5 @@ export function isObject() {
     expect(Is.obj({})).toBe(true);
     expect(Is.obj(undefined)).toBe(false);
     expect(Is.obj(null)).toBe(false);
-    expect(Is.obj(new Error)).toBe(false);
+    expect(Is.obj(new Error)).toBe(true);
 }

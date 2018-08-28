@@ -7,6 +7,6 @@ export function getType() {
     expect(Is.type([])).toBe("array");
     expect(Is.type({})).toBe("object");
     expect(Is.type(undefined)).toBe("nil");
-    expect(Is.type(null)).toBe("nill");
-    expect(Is.type(new Error)).toBe("object");
+    expect(Is.type(null)).toBe("nil");
+    expect(Is.type(new Error)).toBe("error");
 }

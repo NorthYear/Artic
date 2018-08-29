@@ -5,5 +5,6 @@ export interface DatabaseOptionsInterface {
     encryptionKey?: string;
     context?: { [key: string]: new () => any };
     hashNamespace?: boolean;
-    hashKeys?: boolean
+    hashKeys?: boolean;
+    devMode?: boolean;
 }

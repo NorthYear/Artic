@@ -15,6 +15,6 @@ export class Idea extends Artic.Entity {
 export async function controller() {
     let idea = new Idea();
     idea.title = "Cool things";
-    return idea.oSave(mainDatabase)
+    return idea.vSave(mainDatabase)
 }
 ```

@@ -12,11 +12,11 @@ export module Cryptobox {
     /**
      * ### @Artic / Utils / Cryptobox / Hash
      * 
-     * Hash a string using SHA-512
+     * Hash a string using SHA-256
      * @param str 
      */
     export function hash(str: string) {
-        return crypto.createHash('sha512').update(str).digest('hex');
+        return crypto.createHash('sha256').update(str).digest('hex');
     }
 
     /**

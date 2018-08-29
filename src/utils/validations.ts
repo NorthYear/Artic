@@ -34,7 +34,53 @@ export namespace Validations {
         }
     }
 
-    export function validateOptions(options: DatabaseOptionsInterface) {
+    export function validateEncryptionKey(options: DatabaseOptionsInterface, databaseName: string) {
+        if (Is.nil(options.encryptionKey)) {
+            return false;
+        }
+        if (Is.str(options.encryptionKey)) {
+            if (!Is.strLength(options.encryptionKey, 32)) {
+                Exceptions.articError(
+                    `[${databaseName}]->[options]->encryptionKey is set to string, but it must be a string 32 character is length.`
+                )
+            }
+        } else {
+            Exceptions.articError(
+                `[${databaseName}]->[options]->encryptionKey is set, but it must be a string.`,
+                `   hint: Instead got typeof ${typeof options.encryptionKey}`
+            )
+        }
+        return true;
+    }
+
+    export function validateContext(options: DatabaseOptionsInterface) {
+        if (!Is.obj(options.context)) {
+            options.context = {}
+        }
+        options.context["Date"] = Date;
+    }
+
+    export function validateHashs(options: DatabaseOptionsInterface, databaseName: string) {
+        Is.nil(options.hashKeys) ? options.hashKeys = false : null;
+        Is.nil(options.hashNamespace) ? options.hashNamespace = false : null;
+        if (!Is.bool(options.hashKeys)) {
+            Exceptions.articError(
+                `Vallow => Database(${databaseName}) => Options(hashKeys) is set, but it must be a boolean value.`,
+                `   hint: Instead got typeof ${Is.type(options.hashKeys)}`
+            )
+        }
+        if (!Is.bool(options.hashNamespace)) {
+            Exceptions.articError(
+                `[${databaseName}]->[options]->hashNamespace is set, but it must be a boolean value.`,
+                `   hint: Instead got typeof ${Is.type(options.hashNamespace)}`
+            )
+        }
+    }
+
+    export function validateOptions(options: DatabaseOptionsInterface, databaseName: string = "") {
         validateAdapter(options);
+        validateEncryptionKey(options, databaseName);
+        validateContext(options)
+        validateHashs(options, databaseName);
     }
 }

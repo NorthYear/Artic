@@ -9,9 +9,10 @@
     "test": "jest",
     "setup:test:env": "node tools/build.env"
   },
-  "author": "Josh Miller <josh@northyear.com>",
+  "author": "Josh Miller <josh.miller@northyear.com>",
   "license": "MIT",
   "devDependencies": {
+    "@types/chalk": "^2.2.0",
     "@types/jest": "^23.3.1",
     "@types/node": "^10.9.2",
     "dotenv": "^6.0.0",
@@ -24,5 +25,8 @@
       "dist/src/**/*.js",
       "!**/dist/src/interfaces/**"
     ]
+  },
+  "dependencies": {
+    "chalk": "^2.4.1"
   }
 }

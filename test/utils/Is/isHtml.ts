@@ -1,4 +1,4 @@
-import { Is } from "../../../src";
+import { Is } from "../../../src/utils/is";
 //string
 //boolean
 //function

@@ -60,7 +60,7 @@ export namespace Validations {
         options.context["Date"] = Date;
     }
 
-    export function validateHashs(options: DatabaseOptionsInterface, databaseName: string) {
+    export function validateHashOptions(options: DatabaseOptionsInterface, databaseName: string) {
         Is.nil(options.hashKeys) ? options.hashKeys = false : null;
         Is.nil(options.hashNamespace) ? options.hashNamespace = false : null;
         if (!Is.bool(options.hashKeys)) {
@@ -81,6 +81,6 @@ export namespace Validations {
         validateAdapter(options);
         validateEncryptionKey(options, databaseName);
         validateContext(options)
-        validateHashs(options, databaseName);
+        validateHashOptions(options, databaseName);
     }
 }

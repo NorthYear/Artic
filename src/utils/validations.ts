@@ -9,7 +9,6 @@ export namespace Validations {
 
     export function ensureDatabaseLike(database: DatabaseInstance | DatabaseParallelInstance, entity: object | Function, method: string) {
         if(!Is.databaseInstanceLike(database)) {
-            console.log(database);
             Exceptions.articError(
                 `Oops! Did you forget the database instance`,
                 `=> ${Brander.getClassName(entity)}.${method} requires a database instance or parallel database instance to work.`

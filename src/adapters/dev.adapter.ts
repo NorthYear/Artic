@@ -11,7 +11,7 @@ import chalk from "chalk";
  * can be set to quiet mode.
  */
 export class DevAdapter implements AdapterInterface {
-    
+
     /**
      * ### @Artic / Adapters / DevAdapter / Store
      * 
@@ -43,6 +43,7 @@ export class DevAdapter implements AdapterInterface {
      * @param namespace 
      */
     public count(namespace: string) {
+        this.ensure(namespace);
         return Promise.resolve(Object.keys(this.store[namespace]).length);
     }
 
@@ -77,7 +78,7 @@ export class DevAdapter implements AdapterInterface {
      */
     public empty() {
         this.store = {};
-        return Promise.resolve(true);
+        return Promise.resolve();
     }
 
     /**
@@ -89,7 +90,7 @@ export class DevAdapter implements AdapterInterface {
     public emptyNamespace(namespace: string) {
         this.ensure(namespace);
         this.store[namespace] = {};
-        return Promise.resolve(true);
+        return Promise.resolve();
     }
 
 
@@ -111,23 +112,17 @@ export class DevAdapter implements AdapterInterface {
      * @param value 
      */
     public logRecord(key: string, value: string) {
-        if(this.quiet) { return }
-        let lines = [];
+        if (this.quiet) { return }
+        let lines: string[] = [];
         lines.push(chalk.gray("Key:"));
-        key.match(/.{1,100}/g).forEach(line => {
-            lines.push("  " + chalk.cyan(line));
-        })
+        key.match(/.{1,100}/g).forEach(line => lines.push("  " + chalk.cyan(line)));
         lines.push(chalk.gray("Value:"))
-        value.match(/.{1,100}/g).forEach(line => {
-            lines.push("  " + chalk.green(line));
-        })
-        lines.map(line => {
-            return "| " + line
-        }).forEach(line => {
-            console.log(line);
-        })
-        console.log("-------------------------------------------")
+        value.match(/.{1,100}/g).forEach(line => lines.push("  " + chalk.green(line)));
+        let finalStatement = lines.map(line => "| " + line)
+        finalStatement.push("-----------------------------");
+        console.log(finalStatement.join("\n"));
     }
+
 
     /**
      * Helper method to the namespace and
@@ -137,14 +132,14 @@ export class DevAdapter implements AdapterInterface {
      * @param action 
      */
     public logAction(namespace, action: string) {
-        if(this.quiet) { return }
-        console.log("")
-        console.log("")
-        console.log(
-            chalk.blue("@" + namespace.toLowerCase()),
-            chalk.green(action)
-        )
-        console.log("========================================")
+        if (this.quiet) { return }
+        let lines = [
+            "",
+            "",
+            chalk.blue("@" + namespace.toLowerCase()) + " " + chalk.green(action),
+            "========================================"
+        ]
+        console.log(lines.join("\n"));
     }
 
     /**
@@ -160,7 +155,7 @@ export class DevAdapter implements AdapterInterface {
         this.store[namespace][key] = value;
         this.logAction(namespace, "put");
         this.logRecord(key, value);
-        return Promise.resolve(true)
+        return Promise.resolve()
     }
 
     /**
@@ -177,7 +172,7 @@ export class DevAdapter implements AdapterInterface {
             this.store[namespace][item.key] = item.value;
             this.logRecord(item.key, item.value);
         })
-        return Promise.resolve(true)
+        return Promise.resolve()
     }
 
     /**
@@ -193,7 +188,7 @@ export class DevAdapter implements AdapterInterface {
         delete this.store[namespace][key];
         this.logAction(namespace, "remove");
         this.logRecord(key, "null");
-        return Promise.resolve(true)
+        return Promise.resolve()
     }
 
     /**
@@ -210,7 +205,7 @@ export class DevAdapter implements AdapterInterface {
         })
         this.logAction(namespace, "removeMany");
         this.logRecord(JSON.stringify(keys), "was removed");
-        return Promise.resolve(true);
+        return Promise.resolve();
     }
 
     /**

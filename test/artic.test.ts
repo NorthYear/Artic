@@ -10,6 +10,7 @@ import { databaseTesting } from "./database/testing";
 import { databaseParallelInstanceTesting } from "./database.parallel.instance/testing";
 import { databaseToolingTesting } from "./database.tooling/testing";
 import { databaseEventStoreTesting } from "./database.event.store/testing";
+import { adaptersDevAdapterTesting } from "./adapters/dev.adapter/testing";
 
 describe("Utils", () => {
     describe("Is", utilsIsTesting)
@@ -25,4 +26,8 @@ describe("Database", () => {
     describe("Database Parallel Instance", databaseParallelInstanceTesting);
     describe("Database Tooling", databaseToolingTesting);
     describe("Database Event Store", databaseEventStoreTesting);
+})
+
+describe("Adapters", () => {
+    describe("DevAdapter", adaptersDevAdapterTesting);
 })

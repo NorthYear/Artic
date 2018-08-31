@@ -9,6 +9,9 @@ import { isNotNil } from "./isNotNil";
 import { getType } from "./getType";
 import { isError } from "./isError";
 import { isHtml } from "./isHtml";
+import { isDatabaseInstance } from "./isDatabaseInstance";
+import { isParallelDatabaseInstance } from "./isParallelDatabaseInstance";
+import { isDatabaseInstanceLike } from "./isDatabaseInstanceLike";
 
 
 export function utilsIsTesting() {
@@ -22,5 +25,8 @@ export function utilsIsTesting() {
     test("it should be able to determine if a variable is null or undefined", isNil);
     test("it should be able to determine if a varialbe is not a nil value", isNotNil);
     test("it should be able to determine the type of a variable", getType);
-    test("it should be able to determine if a string contains html", isHtml)
+    test("it should be able to determine if a string contains html", isHtml);
+    test("it should be able to determine if a variable is a database instance", isDatabaseInstance);
+    test("it should be able to determine if a variable is a parallel database instance", isParallelDatabaseInstance);
+    test("it should be able to determine if a variable is database instance like", isDatabaseInstanceLike)
 }

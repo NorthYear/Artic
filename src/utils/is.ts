@@ -1,3 +1,6 @@
+import { DatabaseInstance } from "../database.instance";
+import { DatabaseParallelInstance } from "../database.parallel.instance";
+
 /**
  * ### @Artic / Utils / Is
  * 
@@ -132,6 +135,25 @@ export namespace Is {
         if (arr(v)) { return "array" }
         if (v instanceof Error) { return "error" }
         return typeof v;
+    }
+
+
+    export function database(database: DatabaseInstance) {
+        return database instanceof DatabaseInstance
+    }
+
+    export function databaseParallelInstance(databaseParallelInstance: DatabaseParallelInstance) {
+        return databaseParallelInstance instanceof DatabaseParallelInstance;
+    }
+
+    export function databaseInstanceLike(database: any) {
+        if(Is.database(database)) {
+            return true;
+        }
+        if(Is.databaseParallelInstance(database)) {
+            return true;
+        }
+        return false;
     }
 
 }

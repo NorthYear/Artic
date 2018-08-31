@@ -4,6 +4,8 @@ import { Validations } from "./utils/validations";
 import { DatabaseParallelInstance } from "./database.parallel.instance";
 import { DatabaseToolingDecorators } from "./database.tooling";
 import { Serializer } from "./utils/serializer";
+import { DevAdapter } from "./adapters/dev.adapter";
+import { Is } from "./utils/is";
 
 /**
  * ### @Artic / Database
@@ -25,6 +27,7 @@ export namespace Database {
         Validations.validateOptions(options, name);
         let serializer = new Serializer(options.context, name);
         let database = new DatabaseInstance(name);
+        database.adapter = Is.nil(options.adapter) ? new DevAdapter() : options.adapter;
         database.tooling.hashNamespace = DatabaseToolingDecorators.hashNamespace(options);
         database.tooling.hashKey = DatabaseToolingDecorators.hashKey(options);
         database.tooling.serialize = DatabaseToolingDecorators.serialize(options, serializer);

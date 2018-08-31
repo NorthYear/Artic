@@ -27,6 +27,7 @@
     ]
   },
   "dependencies": {
-    "chalk": "^2.4.1"
+    "chalk": "^2.4.1",
+    "uniqid": "^5.0.3"
   }
 }

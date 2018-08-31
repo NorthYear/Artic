@@ -1,8 +1,30 @@
 import { DatabaseOptionsInterface } from "../interfaces/database.options.interface";
 import { Is } from "./is";
 import { Exceptions } from "./exceptions";
+import { DatabaseInstance } from "../database.instance";
+import { DatabaseParallelInstance } from "../database.parallel.instance";
+import { Brander } from "./brander";
 
 export namespace Validations {
+
+    export function ensureDatabaseLike(database: DatabaseInstance | DatabaseParallelInstance, entity: object | Function, method: string) {
+        if(!Is.databaseInstanceLike(database)) {
+            console.log(database);
+            Exceptions.articError(
+                `Oops! Did you forget the database instance`,
+                `=> ${Brander.getClassName(entity)}.${method} requires a database instance or parallel database instance to work.`
+            )
+        }
+    }
+
+    export function ensureDatabase(database: DatabaseInstance, entity: object | Function, method: string) {
+        if(!Is.databaseInstanceLike(database)) {
+            Exceptions.articError(
+                `Oops! Did you forget the database instance`,
+                `=> ${Brander.getClassName(entity)}.${method} requires a database instance to work.`
+            )
+        }
+    }
 
     export function validateAdapter(options: DatabaseOptionsInterface) {
         if (options.devMode === true) {

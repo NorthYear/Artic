@@ -7,6 +7,8 @@ import uniqid = require("uniqid");
 import { Exceptions } from "./utils/exceptions";
 import { Validations } from "./utils/validations";
 import { Cryptobox } from "./utils/cryptobox";
+import { DatabaseStore } from "./database.store";
+import { join } from "path";
 
 /**
  * ### @Artic / Entity
@@ -320,7 +322,9 @@ export class Entity {
         ).then(() => {})
     }
 
-    static vStore() { }
+    public static vStore(name: string) { 
+        return new DatabaseStore(this, name);
+    }
 
     /**
      * ### @Artic / Entity / vSave

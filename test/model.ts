@@ -16,6 +16,9 @@ mainAdapter.quiet = true;
 let backupAdapter = new DevAdapter();
 backupAdapter.quiet = true;
 
+let copyAdapter = new DevAdapter();
+copyAdapter.quiet = true;
+
 export const mainDB = Database.vMake("main", {
     adapter: mainAdapter,
     encryptionKey: process.env.ENCRYPTION_KEY,
@@ -24,6 +27,12 @@ export const mainDB = Database.vMake("main", {
 
 export const backupDB = Database.vMake("backup", {
     adapter: backupAdapter,
+    encryptionKey: null,
+    context
+})
+
+export const copyDB = Database.vMake("copy.db", {
+    adapter: copyAdapter,
     encryptionKey: null,
     context
 })

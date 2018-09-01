@@ -3,28 +3,43 @@ import { EventEmitter } from "events";
 /**
  * ### @Artic / Database / DatabaseEventStore
  * 
- * Keeps up with event emitters for a particular 
- * namespace in a database instance.
+ * The ***DatabasseEventStore*** creates and caches 
+ * ***EventEmitter*** instances to remember all 
+ * subscribers state. Primarily used for entities
+ * and their direct relationships to ***DatabaseInstance***(s).
+ * 
+ * This class only represents a way storing emitters and can
+ * be used for other reasons.
  */
 export class DatabaseEventStore {
+    
     /**
      * ### @Artic / Database / DatabaseEventStore / Events
      * 
-     * Database wide events
+     * The events property holds a global emitter that
+     * it used for global subscriptions under a
+     * particular context.
+     * 
+     * @type {EventEmitter}
      */
     public events: EventEmitter = new EventEmitter();
 
     /**
-     * ### @Artic / Database / DatabaseEventStore / Emitter
+     * ### @Artic / Database / DatabaseEventStore / Emitters
      * 
-     * Individual namespace emitters for a database instance
+     * The emiiters property is a object cache for any and 
+     * all emitters.
+     * 
+     * @type {[key: string] : EventEmitter}
      */
     private emitters: { [key: string]: EventEmitter } = {}
 
     /**
      * ### @Artic / Database / DatabaseEventStore / For
      * 
-     * Retrieve EventEmitter for an individual namespace
+     * If an ***EventEmitter*** has been created, the cached
+     * version will be returned to keep the same state. If not,
+     * a new ***EventEmitter*** will be created and returned.
      * @param namespace 
      */
     public for(namespace: string) {

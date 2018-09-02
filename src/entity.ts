@@ -1,20 +1,25 @@
-import { Is } from "./utils/is";
-import { DatabaseInstance } from "./database.instance";
-import { DatabaseParallelInstance } from "./database.parallel.instance";
-import { EventEmitter } from "events";
-import { Brander } from "./utils/brander";
+import { EventEmitter } from 'events';
+
+import { DatabaseInstance } from './database.instance';
+import { DatabaseParallelInstance } from './database.parallel.instance';
+import { DatabaseStore } from './database.store';
+import { Brander } from './utils/brander';
+import { Cryptobox } from './utils/cryptobox';
+import { Exceptions } from './utils/exceptions';
+import { Is } from './utils/is';
+import { Validations } from './utils/validations';
+
 import uniqid = require("uniqid");
-import { Exceptions } from "./utils/exceptions";
-import { Validations } from "./utils/validations";
-import { Cryptobox } from "./utils/cryptobox";
-import { DatabaseStore } from "./database.store";
-import { join } from "path";
 
 /**
  * ### @Artic / Entity
  * 
- * Representation of the an entity
- * in Artic.
+ * Represents an ***Entity*** in Artic.
+ * 
+ * Entity is a definition of an concept that
+ * contains properties that are persisted and
+ * methods, that are extendable, to build out the 
+ * model of an application.
  */
 export class Entity {
 
@@ -56,7 +61,7 @@ export class Entity {
 
 
     /**
-     * ### @Artic / Entity / oMake
+     * ### @Artic / Entity / vNew
      * 
      * Creates an new instance of the entity, and if 
      * properties are provided, they will populate
@@ -101,12 +106,18 @@ export class Entity {
     /**
      * ### @Artic / Entity / vEvents
      * 
-     * Subscribe to events as it pertains to
-     * a particular database instance
+     * Returns the ***EventEmitter*** for the
+     * current ***Entity*** that corresponds directly
+     * to a database instance you provide.
+     * 
+     * If a ***DatabaseParallelInstance*** is provided, 
+     * the first ***DatabaseInstance***'s ***EventEmitter***
+     * will be returned.
+     * 
      * @param database 
      */
     public static vEvents(database: DatabaseInstance | DatabaseParallelInstance): EventEmitter {
-        Validations.ensureDatabaseLike(database, this, "vEvents(<<db-instance>>)");
+        Validations.ensureDatabaseLike(database, this, "vEvents( ==> db <== )");
         let finalDatabase = database instanceof DatabaseInstance ? database : database.first();
         let realName = Brander.satisfyEntityName(finalDatabase, this);
         let namespace = finalDatabase.tooling.hashNamespace(realName);
@@ -116,17 +127,18 @@ export class Entity {
     /**
      * ### @Artic / Entity / vAll
      * 
-     * Get all records from a database instance
-     * under an entities namespace
+     * When given a ***DatabaseInstance*** or a
+     * ***DatabaseParallelInstance***, it will return
+     * a list of all records in the context of the
+     * current ***Entity***
      * 
-     * @param this 
      * @param database 
      */
     public static vAll<Context extends Entity>(
         this: new () => Context,
         database: DatabaseInstance | DatabaseParallelInstance
     ): Promise<Context[]> {
-        Validations.ensureDatabaseLike(database, this, "vAll(<<db-instance>>);");
+        Validations.ensureDatabaseLike(database, this, "vAll( ==> db <== )");
         let finalDatabase = database instanceof DatabaseInstance ? database : database.first();
         let realName = Brander.satisfyEntityName(finalDatabase, this);
         let namespace = finalDatabase.tooling.hashNamespace(realName);
@@ -137,8 +149,18 @@ export class Entity {
         })
     }
 
+    /**
+     * ### @Artic / Entity / vCount
+     * 
+     * When given a ***DatabaseInstance*** or a
+     * ***DatabaseParallelInstance***, it will count
+     * the number of records that reside under the current
+     * ***Entity***'s namespace.
+     * 
+     * @param database 
+     */
     public static vCount(database: DatabaseInstance | DatabaseParallelInstance): Promise<number> {
-        Validations.ensureDatabaseLike(database, this, "vCount(<<db-instance>>)"); 
+        Validations.ensureDatabaseLike(database, this, "vCount( ==> db <== )"); 
         let finalDatabase = database instanceof DatabaseInstance ? database : database.first();
         let realName = Brander.satisfyEntityName(finalDatabase, this);
         let namespace = finalDatabase.tooling.hashNamespace(realName);
@@ -147,8 +169,20 @@ export class Entity {
         })
     }
 
+
+    /**
+     * ### @Artic / Entity / vHas
+     * 
+     * When given a ***DatabaseInstance*** or a
+     * ***DatabaseParallelInstance***, it will determine
+     * if a record exists with a certain id under the 
+     * current ***Entity***'s namespace.
+     * 
+     * @param database 
+     * @param id 
+     */
     public static vHas(database: DatabaseInstance | DatabaseParallelInstance, id: string): Promise<boolean> {
-        Validations.ensureDatabaseLike(database, this, "vHas( ==> db <==, id: string)"); 
+        Validations.ensureDatabaseLike(database, this, "vHas( ==> db <== , id: string)"); 
         let finalDatabase = database instanceof DatabaseInstance ? database : database.first();
         let realName = Brander.satisfyEntityName(finalDatabase, this);
         let namespace = finalDatabase.tooling.hashNamespace(realName);
@@ -159,6 +193,19 @@ export class Entity {
     }
 
     /**
+     * ### @Artic / Entity / vStream
+     * 
+     * When given a ***DatabaseInstance*** or a
+     * ***DatabaseParallelInstance***, it will stream
+     * all records under the current ***Entity***'s 
+     * namespace in the current ***Entity***'s context
+     * through a handler that you provide. 
+     * 
+     * In the handler, there will two arguments provided. The 
+     * first will be the record in context. The second is an abort
+     * function that maybe called at anytime to cease the
+     * stream. When the stream is aborted or the stream has
+     * completed, the returned promise will resolve.
      * 
      * @param database 
      * @param handler 
@@ -168,7 +215,7 @@ export class Entity {
         database: DatabaseInstance | DatabaseParallelInstance,
         handler: (instance: Context, abort: Function) => void
     ) {
-        Validations.ensureDatabaseLike(database, this, "vStream(<<db-instance>>, streamHandler)");
+        Validations.ensureDatabaseLike(database, this, "vStream( ==> db-instance <==, streamHandler)");
         let finalDatabase = database instanceof DatabaseInstance ? database : database.first();
         let realName = Brander.satisfyEntityName(finalDatabase, this);
         let namespace = finalDatabase.tooling.hashNamespace(realName);
@@ -179,13 +226,29 @@ export class Entity {
         })
     }
 
+    /**
+     * ### @Artic / Entity / vCopyAll
+     * 
+     * Copies an entire ***Entity***'s
+     * namespace from one ***DatabaseInstance***
+     * to another.
+     * 
+     * If you wish to monitor the progress during the
+     * copying, a progress handler maybe supplied that
+     * will be periodically called, suppling you with an 
+     * ***Integer*** representing the percentage complete.
+     * 
+     * @param fromDatabase 
+     * @param toDatabase 
+     * @param progressHandler 
+     */
     public static vCopyAll(
         fromDatabase: DatabaseInstance,
         toDatabase: DatabaseInstance,
         progressHandler?: (percent: number) => void
     ) {
-        Validations.ensureDatabase(fromDatabase, this, "vCopyAll(<<db-instance>>, toDatabase)");
-        Validations.ensureDatabase(toDatabase, this, "vCopyAll(fromDatabase, <<db-instance>>)");
+        Validations.ensureDatabase(fromDatabase, this, "vCopyAll( ==> db <== , toDatabase)");
+        Validations.ensureDatabase(toDatabase, this, "vCopyAll(fromDatabase, ==> db <==)");
         let fromName = Brander.satisfyEntityName(fromDatabase, this);
         let toName = Brander.satisfyEntityName(toDatabase, this);
         let fromNamespace = fromDatabase.tooling.hashNamespace(fromName);
@@ -209,16 +272,34 @@ export class Entity {
         })
     }
 
+    /**
+     * ### @Artic / Entity / vEmpty
+     * 
+     * Empties all records under an ***Entity***'s 
+     * namespace in an particular ***DatabaseInstance*** 
+     * or ***DatabaseParallelInstance***
+     * 
+     * @param database 
+     */
     public static vEmpty(database: DatabaseInstance | DatabaseParallelInstance) {
-        Validations.ensureDatabaseLike(database, this, "vEmpty(<<db-instance>>)")
+        Validations.ensureDatabaseLike(database, this, "vEmpty( ==> db <== )")
         let finalDatabase = database instanceof DatabaseInstance ? database : database.first();
         let realName = Brander.satisfyEntityName(finalDatabase, this);
         let namespace = finalDatabase.tooling.hashNamespace(realName);
         return finalDatabase.adapter.emptyNamespace(namespace);
     }
 
+    /**
+     * ### @Artic / Entity / vClose
+     * 
+     * Closes a ***DatabaseInstance***'s or a 
+     * ***DatabaseParallelInstance***'s adapter connection to 
+     * the current ***Entity***'s namespace.
+     * 
+     * @param database 
+     */
     public static vClose(database: DatabaseInstance | DatabaseParallelInstance): Promise<void> {
-        Validations.ensureDatabaseLike(database, this, "vClose(<<db-instance>>)")
+        Validations.ensureDatabaseLike(database, this, "vClose( ==> db <== )")
         let databases = database instanceof DatabaseInstance ? [database] : database.getInstances()
         return Promise.all(
             databases.map(database => {
@@ -231,12 +312,23 @@ export class Entity {
         })
     }
     
+    /**
+     * ### @Artic / Entity / vSaveMany
+     * 
+     * When given a ***DatabaseInstance*** or a
+     * ***DatabaseParallelInstance***, persists 
+     * a list of instances of the current 
+     * ***Entity***.
+     *  
+     * @param database 
+     * @param instances 
+     */
     public static vSaveMany<Context extends Entity>(
         this: new () => Context,
         database: DatabaseInstance | DatabaseParallelInstance,
         instances: Context[],
     ) {
-        Validations.ensureDatabaseLike(database, this, "vSaveMany(<<db-instance>>, instances)")
+        Validations.ensureDatabaseLike(database, this, "vSaveMany( ==> db <== , instances)")
         let databases = database instanceof DatabaseInstance ? [database] : database.getInstances();
         instances.forEach(instance => {
             if (!Is.str(instance.id)) {
@@ -269,12 +361,23 @@ export class Entity {
         })
     }
 
+    /**
+     * ### @Artic / Entity / vFind
+     * 
+     * When given a ***DatabaseInstance*** or a
+     * ***DatabaseParallelInstance***, finds a
+     * particular record by id under the current
+     * ***Entity***'s namespace.
+     * 
+     * @param database 
+     * @param id 
+     */
     public static vFind<Context extends Entity>(
         this: new () => Context,
         database: DatabaseInstance | DatabaseParallelInstance,
         id: string
     ): Promise<Context> {
-        Validations.ensureDatabaseLike(database, this, "vFind(<<db-instance>>, id)")
+        Validations.ensureDatabaseLike(database, this, "vFind( ==> db <== , id)")
         let finalDatabase = database instanceof DatabaseInstance ? database : database.first();
         let realName = Brander.satisfyEntityName(finalDatabase, this);
         let namespace = finalDatabase.tooling.hashNamespace(realName);
@@ -287,12 +390,23 @@ export class Entity {
     }
 
 
+    /**
+     * ### @Artic / Entity / vFindMany
+     * 
+     * When given a ***DatabaseInstance*** or a
+     * ***DatabaseParallelInstance***, finds many
+     * records by a list of ids under a current
+     * ***Entity***'s namespace.
+     * 
+     * @param database 
+     * @param ids 
+     */
     public static vFindMany<Context extends Entity>(
         this: new () => Context,
         database: DatabaseInstance | DatabaseParallelInstance,
         ids: string[]
     ): Promise<Context[]> {
-        Validations.ensureDatabaseLike(database, this, "vFindMany(==> db <==, ids:string[])")
+        Validations.ensureDatabaseLike(database, this, "vFindMany( ==> db <== , ids:string[])")
         let finalDatabase = database instanceof DatabaseInstance ? database : database.first();
         let realName = Brander.satisfyEntityName(finalDatabase, this);
         let namespace = finalDatabase.tooling.hashNamespace(realName);
@@ -306,12 +420,23 @@ export class Entity {
         });
     }
 
+    /**
+     * ### @Artic / Entity / vRemoveMany
+     * 
+     * When given a ***DatabaseInstance*** or a
+     * ***DatabaseParallelInstance***, removes many
+     * records by a list ids under the current
+     * ***Entity***'s namespace.
+     * 
+     * @param database 
+     * @param ids 
+     */
     public static vRemoveMany<Context extends Entity>(
         this: new () => Context,
         database: DatabaseInstance | DatabaseParallelInstance,
         ids: string[]
     ) {
-        Validations.ensureDatabaseLike(database, this, "vRemoveMany(==> db <==, ids:string[])")
+        Validations.ensureDatabaseLike(database, this, "vRemoveMany( ==> db <== , ids:string[])")
         let databases = database instanceof DatabaseInstance ? [database] : database.getInstances();
         return Promise.all(
             databases.map(database => {
@@ -327,6 +452,19 @@ export class Entity {
         ).then(() => {})
     }
 
+    /**
+     * ### @Artic / Entity / vStore
+     * 
+     * Creates an instance of ***DatabaseStore***
+     * and returns it futher persistance.
+     * 
+     * Creates a seperate key-value store; great 
+     * for creating indexes or stashing extra data
+     * that does not necessary fit in a normal
+     * entity's scenario.
+     * 
+     * @param name 
+     */
     public static vStore(name: string) { 
         return new DatabaseStore(this, name);
     }
@@ -334,12 +472,15 @@ export class Entity {
     /**
      * ### @Artic / Entity / vSave
      * 
-     * Saves the current record to persistance. If
-     * the record previously existed, it will overwrite
-     * the previous state.
+     * When given a ***DatabaseInstance*** or a
+     * ***DatabaseParallelInstance***, saves the current 
+     * record to persistance. If the record previously 
+     * existed, it will overwrite the previous record.
+     * 
      * @param database 
      */
     public vSave<Context extends Entity>(this: Context, database: DatabaseInstance | DatabaseParallelInstance): Promise<Context> {
+        Validations.ensureDatabaseLike(database, this, "vSave( ==> db <== )")
         let databases = database instanceof DatabaseInstance ? [database] : database.getInstances();
         if (!Is.str(this.id)) {
             this.id = uniqid();
@@ -363,8 +504,18 @@ export class Entity {
         })
     }
     
+    /**
+     * ### @Artic / Entity / vRemove
+     * 
+     * When given a ***DatabaseInstance*** or a
+     * ***DatabaseParallelInstance***, removes 
+     * the record from the current ***Entity***'s
+     * namespace.
+     * 
+     * @param database 
+     */
     public vRemove(database: DatabaseInstance | DatabaseParallelInstance) {
-        Validations.ensureDatabaseLike(database, this, "vRemove(==> db <==)")
+        Validations.ensureDatabaseLike(database, this, "vRemove( ==> db <== )")
         let databases = database instanceof DatabaseInstance ? [database] : database.getInstances();
         if(!Is.str(this.id)) {
             Exceptions.articError(
@@ -383,6 +534,15 @@ export class Entity {
         ).then(() => {})
     }
 
+    /**
+     * ### @Artic / Entity / vInject
+     * 
+     * Injects the current instance into
+     * any number of handlers provided as
+     * a dependency.
+     * 
+     * @param handlers 
+     */
     public vInject<Context extends Entity>(this: Context, ...handlers: ((instance: Context) => void)[]) {
         handlers.forEach(handler => {
             handler(this)
@@ -390,25 +550,72 @@ export class Entity {
         return this;
     }
 
-
+    /**
+     * ### @Artic / Entity / vJson
+     * 
+     * Returns a JSON version of the
+     * current instance. 
+     */
     public vJson() {
         return JSON.stringify(this);
     }
 
+    /**
+     * ### @Artic / Entity / vMap
+     * 
+     * Similiar to ***Array.prototype.map***,
+     * vMap passes the current instance to a 
+     * map handler and returns the output of 
+     * the handler.
+     * 
+     * Sometimes ***Entity***s have sensitive
+     * information that does not necessary need
+     * to be shared via an API. This provides a
+     * way to create a function that handles creating
+     * a safe rendition of the data wishing to be shared
+     * 
+     * @param mapHandler 
+     */
     public vMap<Context, T>(this: Context, mapHandler: (instance: Context) => T): T {
         return mapHandler(this);
     }
 
    
+    /**
+     * ### @Artic / Entity / vMapJson
+     * 
+     * Similiar to ***Array.prototype.map***,
+     * vMapJson passes the current instance to a 
+     * map handler and returns the output of 
+     * the handler as JSON.
+     * 
+     * @param handler 
+     */
     public vMapJson<Context>(this: Context, handler: (instance: Context) => any): string {
         return JSON.stringify(handler(this));
     }
 
+    /**
+     * ### @Artic / Entity / vEncrypt
+     * 
+     * Returns an encrypted JSON version
+     * of the current instance. It is encrypted
+     * using AES-265-CBC with an initialization 
+     * vector.
+     * 
+     * Format = [IV] : [EncryptedData]
+     * @param key 
+     */
     public vEncrypt(key: string): string {
         return Cryptobox.encrypt(JSON.stringify(this), key);
     }
 
-
+    /**
+     * ### @Artic / Entity / vConsole
+     * 
+     * ***console.log***'s the current instance
+     * with color highlighting.
+     */
     public vConsole() {
         console.dir(this, {
             showHidden: false,
@@ -417,6 +624,17 @@ export class Entity {
         })
     }
 
+    /**
+     * ### @Artic / Entity / vMapEncrypt
+     * 
+     * Similiar to ***Array.prototype.map***,
+     * vMapEncrypt passes the current instance to a 
+     * map handler and returns the output of 
+     * the handler as JSON that is encrypted.
+     * 
+     * @param key 
+     * @param handler 
+     */
     public vMapEncrypt<Context>(
         this: Context,
         key: string,

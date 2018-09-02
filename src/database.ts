@@ -49,7 +49,7 @@ export namespace Database {
      * 
      * @param databases 
      */
-    export function vParallel(...databases) {
+    export function vParallel(...databases: DatabaseInstance[]) {
         return new DatabaseParallelInstance(databases);
     }
 }

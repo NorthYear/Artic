@@ -31,7 +31,9 @@ export class DatabaseStore {
                 let namespace = database.tooling.hashNamespace(name);
                 let hashedKey = database.tooling.hashKey(key);
                 return database.adapter.open(namespace).then(() => {
-                    return database.adapter.put(namespace, hashedKey, database.tooling.serialize(value))
+                    return database.adapter.put(namespace, hashedKey, database.tooling.serialize(value)).then(() => {
+                        database.eventStore.for(namespace).emit("saved", value);
+                    })
                 })
             })
         ).then(() => {})
@@ -55,11 +57,18 @@ export class DatabaseStore {
         database: DatabaseInstance | DatabaseParallelInstance, 
         key: string
     ) {
-        let finalDatabase = database instanceof DatabaseInstance ? database : database.first();
-        let namespace = join(Brander.satisfyEntityName(finalDatabase, this.entity), this.name);
-        let hashedKey = finalDatabase.tooling.hashKey(key);
-        return finalDatabase.adapter.open(namespace).then(() => {
-            return finalDatabase.adapter.remove(namespace, key)
-        })
+        let databases = database instanceof DatabaseInstance ? [database] : database.getInstances();
+        return Promise.all(
+            databases.map(database => {
+                let name = join(Brander.satisfyEntityName(database, this.entity), this.name);
+                let namespace = database.tooling.hashNamespace(name);
+                let hashedKey = database.tooling.hashKey(key);
+                return database.adapter.open(namespace).then(() => {
+                    return database.adapter.remove(namespace, hashedKey).then(() => {
+                        database.eventStore.for(namespace).emit("removed", key);
+                    })
+                })
+            })
+        ).then(() => {})
     }
 }

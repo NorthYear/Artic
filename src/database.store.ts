@@ -1,12 +1,39 @@
-import { DatabaseInstance } from "./database.instance";
-import { DatabaseParallelInstance } from "./database.parallel.instance";
-import { Brander } from "./utils/brander";
-import { join } from "path";
+import { join } from 'path';
 
+import { DatabaseInstance } from './database.instance';
+import { DatabaseParallelInstance } from './database.parallel.instance';
+import { Brander } from './utils/brander';
+
+/**
+ * ### @Artic / DatabaseStore
+ * 
+ * Represents a key-value store that
+ * is appended to an ***Entity***
+ */
 export class DatabaseStore {
 
+    /**
+     * ### @Artic / DatabaseStore / Constructor
+     * 
+     * Create an instance of ***DatabaseStore*** with
+     * a given ***Entity*** and name.
+     * @param entity 
+     * @param name 
+     */
     public constructor(private entity: typeof Object | Function, private name: string) {}
 
+
+     /**
+     * ### @Artic / DatabaseStore / vHas
+     * 
+     * When given a ***DatabaseInstance*** or a
+     * ***DatabaseParallelInstance***, it will determine
+     * if a record exists with a certain key under the 
+     * current ***Entity***'s store.
+     * 
+     * @param database 
+     * @param id 
+     */
     public vHas(
         database: DatabaseInstance | DatabaseParallelInstance, 
         key: string
@@ -19,6 +46,17 @@ export class DatabaseStore {
         })
     }
 
+    /**
+     * ### @Artic / DatabaseStore / vSet
+     * 
+     * When given a ***DatabaseInstance*** or a
+     * ***DatabaseParallelInstance***, persists 
+     * a key and value under the current 
+     * ***Entity***'s store.
+     *  
+     * @param database 
+     * @param instances 
+     */
     public vSet(
         database: DatabaseInstance | DatabaseParallelInstance, 
         key: string, 
@@ -39,6 +77,17 @@ export class DatabaseStore {
         ).then(() => {})
     }
 
+    /**
+     * ### @Artic / DatabaseStore / vGet
+     * 
+     * When given a ***DatabaseInstance*** or a
+     * ***DatabaseParallelInstance***, gets a
+     * particular record by key under the current
+     * ***Entity***'s store.
+     * 
+     * @param database 
+     * @param id 
+     */
     public vGet<Context>(
         database: DatabaseInstance | DatabaseParallelInstance, 
         key: string
@@ -53,6 +102,17 @@ export class DatabaseStore {
         })
     }
 
+     /**
+     * ### @Artic / Entity / vRemove
+     * 
+     * When given a ***DatabaseInstance*** or a
+     * ***DatabaseParallelInstance***, removes 
+     * the record from the current ***Entity***'s
+     * store.
+     * 
+     * @param database
+     * @param key 
+     */
     public vRemove<Context>(
         database: DatabaseInstance | DatabaseParallelInstance, 
         key: string

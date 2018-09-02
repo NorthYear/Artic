@@ -1,5 +1,5 @@
-import { Database } from "./database";
-import { Entity } from "./entity";
+import { Database } from './database';
+import { Entity } from './entity';
 
 export { Database };
 export { Entity };

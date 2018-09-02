@@ -42,7 +42,7 @@ export class DatabaseInstance {
     public adapter: AdapterInterface;
 
     /**
-     * ### @Artice / DatabaseInstance / Tooling
+     * ### @Artic / DatabaseInstance / Tooling
      * 
      * The tooling, under the hood, to serialize, encrypt 
      * and hash data before persistance.

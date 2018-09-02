@@ -1,5 +1,6 @@
-import { Exceptions } from "../utils/exceptions";
-import { DatabaseInstance } from "../database.instance";
+import { DatabaseInstance } from '../database.instance';
+import { Exceptions } from '../utils/exceptions';
+
 import path = require("path");
 
 

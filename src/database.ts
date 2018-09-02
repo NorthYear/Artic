@@ -1,11 +1,11 @@
-import { DatabaseInstance } from "./database.instance";
-import { DatabaseOptionsInterface } from "./interfaces/database.options.interface";
-import { Validations } from "./utils/validations";
-import { DatabaseParallelInstance } from "./database.parallel.instance";
-import { DatabaseToolingDecorators } from "./database.tooling";
-import { Serializer } from "./utils/serializer";
-import { DevAdapter } from "./adapters/dev.adapter";
-import { Is } from "./utils/is";
+import { DevAdapter } from './adapters/dev.adapter';
+import { DatabaseInstance } from './database.instance';
+import { DatabaseParallelInstance } from './database.parallel.instance';
+import { DatabaseToolingDecorators } from './database.tooling';
+import { DatabaseOptionsInterface } from './interfaces/database.options.interface';
+import { Is } from './utils/is';
+import { Serializer } from './utils/serializer';
+import { Validations } from './utils/validations';
 
 /**
  * ### @Artic / Database

@@ -1,9 +1,9 @@
-import { DatabaseOptionsInterface } from "./interfaces/database.options.interface";
-import { Cryptobox } from "./utils/cryptobox";
-import { Is } from "./utils/is";
-import { Serializer } from "./utils/serializer";
-import { Exceptions } from "./utils/exceptions";
-import { Validations } from "./utils/validations";
+import { DatabaseOptionsInterface } from './interfaces/database.options.interface';
+import { Cryptobox } from './utils/cryptobox';
+import { Exceptions } from './utils/exceptions';
+import { Is } from './utils/is';
+import { Serializer } from './utils/serializer';
+import { Validations } from './utils/validations';
 
 /**
  * ### @Artic / DatabaseTooling

@@ -258,10 +258,13 @@ export class Entity {
                             value: database.tooling.serialize(instance)
                         }
                     })
-                    return database.adapter.putMany(namespace, entries)
+                    return database.adapter.putMany(namespace, entries).then(() => {
+                        let emitter = database.eventStore.for(namespace);
+                        instances.forEach(instance => emitter.emit("saved", instance));
+                    })
                 })
             })
-        ).then(booleans => {
+        ).then(() => {
            return instances;
         })
     }
@@ -316,7 +319,9 @@ export class Entity {
                 let namespace = database.tooling.hashNamespace(realName);
                 let keys = ids.map(id => database.tooling.hashKey(id));
                 return database.adapter.open(namespace).then(() => {
-                    return database.adapter.removeMany(namespace, keys)
+                    return database.adapter.removeMany(namespace, keys).then(() => {
+                        database.eventStore.for(namespace).emit("removed", ids);
+                    })
                 })
             })
         ).then(() => {})
@@ -349,7 +354,9 @@ export class Entity {
                 let namespace = database.tooling.hashNamespace(realName);
                 let key = database.tooling.hashKey(this.id);
                 let value = database.tooling.serialize(this);
-                return database.adapter.put(namespace, key, value)
+                return database.adapter.put(namespace, key, value).then(() => {
+                    database.eventStore.for(namespace).emit("saved", this);
+                })
             })
         ).then(() => {
             return this;
@@ -357,6 +364,7 @@ export class Entity {
     }
     
     public vRemove(database: DatabaseInstance | DatabaseParallelInstance) {
+        Validations.ensureDatabaseLike(database, this, "vRemove(==> db <==)")
         let databases = database instanceof DatabaseInstance ? [database] : database.getInstances();
         if(!Is.str(this.id)) {
             Exceptions.articError(
@@ -368,7 +376,9 @@ export class Entity {
                 let realName = Brander.satisfyEntityName(database, this);
                 let namespace = database.tooling.hashNamespace(realName);
                 let key = database.tooling.hashKey(this.id);
-                return database.adapter.remove(namespace, key)
+                return database.adapter.remove(namespace, key).then(() => {
+                    database.eventStore.for(namespace).emit("removed", this.id);
+                })
             })
         ).then(() => {})
     }

@@ -65,4 +65,15 @@ export class DatabaseInstance {
      * @param name 
      */
     public constructor(name: string) { this.name = name }
+
+
+    /**
+     * ### Artic / DatabaseInstance / Empty
+     * 
+     * Empty an entire database of all records
+     * in all namespaces.
+     */
+    public empty() {
+        return this.adapter.empty();
+    }
 }

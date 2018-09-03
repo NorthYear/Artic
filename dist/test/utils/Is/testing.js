@@ -1,0 +1,33 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var isBool_1 = require("./isBool");
+var stringLength_1 = require("./stringLength");
+var isString_1 = require("./isString");
+var isFunction_1 = require("./isFunction");
+var isArray_1 = require("./isArray");
+var isObject_1 = require("./isObject");
+var isNil_1 = require("./isNil");
+var isNotNil_1 = require("./isNotNil");
+var getType_1 = require("./getType");
+var isError_1 = require("./isError");
+var isHtml_1 = require("./isHtml");
+var isDatabaseInstance_1 = require("./isDatabaseInstance");
+var isParallelDatabaseInstance_1 = require("./isParallelDatabaseInstance");
+var isDatabaseInstanceLike_1 = require("./isDatabaseInstanceLike");
+function utilsIsTesting() {
+    test("it should be able to determine if a variable is an error", isError_1.isError);
+    test("it should be able to determine if a variable is a string", isString_1.isString);
+    test("it should be able to determine if a variable has a particular string length", stringLength_1.stringLength);
+    test("it should be able to determine if a variable is a boolean value", isBool_1.isBool);
+    test("it should be able to determine if a variable is a function", isFunction_1.isFunction);
+    test("it should be able to determine if a variable is an array", isArray_1.isArray);
+    test("it should be able to determine if a variable is an obj", isObject_1.isObject);
+    test("it should be able to determine if a variable is null or undefined", isNil_1.isNil);
+    test("it should be able to determine if a varialbe is not a nil value", isNotNil_1.isNotNil);
+    test("it should be able to determine the type of a variable", getType_1.getType);
+    test("it should be able to determine if a string contains html", isHtml_1.isHtml);
+    test("it should be able to determine if a variable is a database instance", isDatabaseInstance_1.isDatabaseInstance);
+    test("it should be able to determine if a variable is a parallel database instance", isParallelDatabaseInstance_1.isParallelDatabaseInstance);
+    test("it should be able to determine if a variable is database instance like", isDatabaseInstanceLike_1.isDatabaseInstanceLike);
+}
+exports.utilsIsTesting = utilsIsTesting;

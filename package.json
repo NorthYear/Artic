@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc --watch",
+    "start:dev": "tsc --watch",
+    "build": "tsc",
     "test": "jest",
     "setup:test:env": "node tools/build.env"
   },

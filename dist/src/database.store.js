@@ -1,13 +1,38 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var path_1 = require("path");
 var database_instance_1 = require("./database.instance");
 var brander_1 = require("./utils/brander");
-var path_1 = require("path");
+/**
+ * ### @Artic / DatabaseStore
+ *
+ * Represents a key-value store that
+ * is appended to an ***Entity***
+ */
 var DatabaseStore = /** @class */ (function () {
+    /**
+     * ### @Artic / DatabaseStore / Constructor
+     *
+     * Create an instance of ***DatabaseStore*** with
+     * a given ***Entity*** and name.
+     * @param entity
+     * @param name
+     */
     function DatabaseStore(entity, name) {
         this.entity = entity;
         this.name = name;
     }
+    /**
+    * ### @Artic / DatabaseStore / vHas
+    *
+    * When given a ***DatabaseInstance*** or a
+    * ***DatabaseParallelInstance***, it will determine
+    * if a record exists with a certain key under the
+    * current ***Entity***'s store.
+    *
+    * @param database
+    * @param id
+    */
     DatabaseStore.prototype.vHas = function (database, key) {
         var finalDatabase = database instanceof database_instance_1.DatabaseInstance ? database : database.first();
         var namespace = path_1.join(brander_1.Brander.satisfyEntityName(finalDatabase, this.entity), this.name);
@@ -16,6 +41,17 @@ var DatabaseStore = /** @class */ (function () {
             return finalDatabase.adapter.has(namespace, key);
         });
     };
+    /**
+     * ### @Artic / DatabaseStore / vSet
+     *
+     * When given a ***DatabaseInstance*** or a
+     * ***DatabaseParallelInstance***, persists
+     * a key and value under the current
+     * ***Entity***'s store.
+     *
+     * @param database
+     * @param instances
+     */
     DatabaseStore.prototype.vSet = function (database, key, value) {
         var _this = this;
         var databases = database instanceof database_instance_1.DatabaseInstance ? [database] : database.getInstances();
@@ -30,6 +66,17 @@ var DatabaseStore = /** @class */ (function () {
             });
         })).then(function () { });
     };
+    /**
+     * ### @Artic / DatabaseStore / vGet
+     *
+     * When given a ***DatabaseInstance*** or a
+     * ***DatabaseParallelInstance***, gets a
+     * particular record by key under the current
+     * ***Entity***'s store.
+     *
+     * @param database
+     * @param id
+     */
     DatabaseStore.prototype.vGet = function (database, key) {
         var finalDatabase = database instanceof database_instance_1.DatabaseInstance ? database : database.first();
         var namespace = path_1.join(brander_1.Brander.satisfyEntityName(finalDatabase, this.entity), this.name);
@@ -40,6 +87,17 @@ var DatabaseStore = /** @class */ (function () {
             });
         });
     };
+    /**
+    * ### @Artic / Entity / vRemove
+    *
+    * When given a ***DatabaseInstance*** or a
+    * ***DatabaseParallelInstance***, removes
+    * the record from the current ***Entity***'s
+    * store.
+    *
+    * @param database
+    * @param key
+    */
     DatabaseStore.prototype.vRemove = function (database, key) {
         var _this = this;
         var databases = database instanceof database_instance_1.DatabaseInstance ? [database] : database.getInstances();

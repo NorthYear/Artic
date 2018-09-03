@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var cryptobox_1 = require("./utils/cryptobox");
-var is_1 = require("./utils/is");
 var exceptions_1 = require("./utils/exceptions");
+var is_1 = require("./utils/is");
 var validations_1 = require("./utils/validations");
 /**
  * ### @Artic / DatabaseTooling

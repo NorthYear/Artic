@@ -41,6 +41,7 @@ import { vEncrypt } from "./vEncrypt";
 import { vConsole } from "./vConsole";
 import { vMapEncrypt } from "./vMapEncrypt";
 import { vStore } from "./vStore";
+import { emptyDB } from "./emptyDB";
 
 export function entityTesting() {
     test("it should be able to make an instance", vNew);
@@ -85,5 +86,6 @@ export function entityTesting() {
     test("it should be able to encrypt", vEncrypt);
     test("it should be able to console", vConsole);
     test("it should be able to map, json and ecrypt", vMapEncrypt);
-    test("it should be able to create a database store", vStore)
+    test("it should be able to create a database store", vStore);
+    test("it should be able to empty database instance", emptyDB);
 }

@@ -1,4 +1,4 @@
-import { DatabaseInstance } from "../database.instance";
+import { DatabaseInstance } from '../database.instance';
 /**
  * ### @Artic / Utils / Brander
  *

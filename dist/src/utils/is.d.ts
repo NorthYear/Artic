@@ -88,7 +88,7 @@ export declare namespace Is {
      * Determines the type of the variable
      * @param v
      */
-    function type(v: any): "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function" | "nil" | "array" | "error";
+    function type(v: any): "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function" | "error" | "nil" | "array";
     function database(database: DatabaseInstance): boolean;
     function databaseParallelInstance(databaseParallelInstance: DatabaseParallelInstance): boolean;
     function databaseInstanceLike(database: any): boolean;

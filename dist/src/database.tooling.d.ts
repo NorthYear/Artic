@@ -1,5 +1,5 @@
-import { DatabaseOptionsInterface } from "./interfaces/database.options.interface";
-import { Serializer } from "./utils/serializer";
+import { DatabaseOptionsInterface } from './interfaces/database.options.interface';
+import { Serializer } from './utils/serializer';
 /**
  * ### @Artic / DatabaseTooling
  *

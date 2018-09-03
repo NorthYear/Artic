@@ -43,6 +43,7 @@ var vEncrypt_1 = require("./vEncrypt");
 var vConsole_1 = require("./vConsole");
 var vMapEncrypt_1 = require("./vMapEncrypt");
 var vStore_1 = require("./vStore");
+var emptyDB_1 = require("./emptyDB");
 function entityTesting() {
     test("it should be able to make an instance", vNew_1.vNew);
     test("it should be able to seed instances", vSeed_1.vSeed);
@@ -87,5 +88,6 @@ function entityTesting() {
     test("it should be able to console", vConsole_1.vConsole);
     test("it should be able to map, json and ecrypt", vMapEncrypt_1.vMapEncrypt);
     test("it should be able to create a database store", vStore_1.vStore);
+    test("it should be able to empty database instance", emptyDB_1.emptyDB);
 }
 exports.entityTesting = entityTesting;

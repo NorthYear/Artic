@@ -1,24 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var dev_adapter_1 = require("./adapters/dev.adapter");
 var database_instance_1 = require("./database.instance");
-var validations_1 = require("./utils/validations");
 var database_parallel_instance_1 = require("./database.parallel.instance");
 var database_tooling_1 = require("./database.tooling");
-var serializer_1 = require("./utils/serializer");
-var dev_adapter_1 = require("./adapters/dev.adapter");
 var is_1 = require("./utils/is");
+var serializer_1 = require("./utils/serializer");
+var validations_1 = require("./utils/validations");
 /**
  * ### @Artic / Database
  *
- * Main entry point to create
- * database instances.
+ * ***Database*** is the main entry point
+ * for creating database instances.
  */
 var Database;
 (function (Database) {
     /**
      * ### @Artic / Database / vMake
      *
-     * Create a database instance
+     * Creates a new database instance given
+     * a name and options
      * @param name
      * @param options
      */
@@ -39,8 +40,13 @@ var Database;
     /**
      * ### @Artic / Database / vParallel
      *
-     * Create a parallel database instance
-     * combining multiple database instances.
+     * Creates a ***DatabaseParallelInstance*** combining
+     * more than one database instance to persist to
+     * more than one location at the same time. All
+     * writes will persist to every combined instance
+     * while all reads will be read from only the first
+     * instance provided.
+     *
      * @param databases
      */
     function vParallel() {

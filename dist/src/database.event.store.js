@@ -9,7 +9,7 @@ var events_1 = require("events");
  * subscribers state. Primarily used for entities
  * and their direct relationships to ***DatabaseInstance***(s).
  *
- * This class only represents a way storing emitters and can
+ * This class only represents a way of storing emitters and can
  * be used for other reasons.
  */
 var DatabaseEventStore = /** @class */ (function () {

@@ -169,7 +169,6 @@ export class Entity {
         })
     }
 
-
     /**
      * ### @Artic / Entity / vHas
      * 

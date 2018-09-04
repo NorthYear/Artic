@@ -13,6 +13,7 @@ import { databaseEventStoreTesting } from "./database.event.store/testing";
 import { adaptersDevAdapterTesting } from "./adapters/dev.adapter/testing";
 import { entityTesting } from "./entity/testing";
 import { databaseStoreTesting } from "./database.store/testing";
+import { repoTesting } from "./repo/testing";
 
 describe("Utils", () => {
     describe("Is", utilsIsTesting)
@@ -37,3 +38,5 @@ describe("Adapters", () => {
 describe("Entity", entityTesting)
 
 describe("Database Store", databaseStoreTesting);
+
+describe("Repo", repoTesting);

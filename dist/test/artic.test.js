@@ -15,6 +15,7 @@ var testing_10 = require("./database.event.store/testing");
 var testing_11 = require("./adapters/dev.adapter/testing");
 var testing_12 = require("./entity/testing");
 var testing_13 = require("./database.store/testing");
+var testing_14 = require("./repo/testing");
 describe("Utils", function () {
     describe("Is", testing_1.utilsIsTesting);
     describe("Exceptions", testing_2.utilsExceptionsTesting);
@@ -34,3 +35,4 @@ describe("Adapters", function () {
 });
 describe("Entity", testing_12.entityTesting);
 describe("Database Store", testing_13.databaseStoreTesting);
+describe("Repo", testing_14.repoTesting);
